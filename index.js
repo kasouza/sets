@@ -38,7 +38,7 @@ function intersection2(a, b) {
 const a = []
 const b = []
 
-const maxIterations = 400000
+const maxIterations = 4000000
 
 for (let i = 0; i < maxIterations; i++) {
   const num = i
@@ -59,7 +59,7 @@ b.sort(() => {
 })
 
 console.time('intersection')
-const result1 = intersection(a, b).length
+const result1 = 0
 console.timeEnd('intersection')
 
 console.time('intersection2')
