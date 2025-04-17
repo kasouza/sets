@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -22,17 +23,20 @@ struct hashset {
 
 void add(struct hashset *set, int value);
 
-int hash(int value, int cap) { return value % cap; }
+uint32_t hash(int value, int cap) {
+    uint32_t hash = value;
+    return hash % cap;
+}
 
 void grow(struct hashset *set) {
-    int new_cap = set->buffer_cap * 2;
+    int new_cap = set->buffer_cap * 4;
     struct hashset_node *new_buffer =
         calloc(new_cap, sizeof(struct hashset_node));
 
     for (int i = 0; i < set->buffer_cap; i++) {
         if (set->buffer[i].init) {
-            int hashed = hash(set->buffer[i].value, new_cap);
-            int idx = hashed;
+            uint32_t hashed = hash(set->buffer[i].value, new_cap);
+            uint32_t idx = hashed;
 
             while (new_buffer[idx].init) {
                 if (idx >= new_cap - 1) {
@@ -58,12 +62,12 @@ void add(struct hashset *set, int value) {
     float new_len = set->num_elements + 1;
     float load = new_len / set->buffer_cap;
 
-    if (load > 0.75) {
+    if (load > 0.5) {
         grow(set);
     }
 
-    int hashed = hash(value, set->buffer_cap);
-    int idx = hashed;
+    uint32_t hashed = hash(value, set->buffer_cap);
+    uint32_t idx = hashed;
 
     while (set->buffer[idx].init) {
         if (set->buffer[idx].value == value) {
@@ -104,9 +108,8 @@ struct optional_int {
 };
 
 bool has(struct hashset *set, int value) {
-    int hashed = hash(value, set->buffer_cap);
-
-    int idx = hashed;
+    uint32_t hashed = hash(value, set->buffer_cap);
+    uint32_t idx = hashed;
 
     while (set->buffer[idx].init) {
         if (set->buffer[idx].value == value) {
@@ -191,7 +194,7 @@ void intersection2_unique(KLIB_DYNARR(int) * a, KLIB_DYNARR(int) * b,
 int main() {
     srand(time(NULL));
 
-    int maxIterations = 500;
+    int maxIterations = 100000000;
 
     KLIB_DYNARR(int) *a = KLIB_DYNARR_CREATE(int);
     KLIB_DYNARR(int) *b = KLIB_DYNARR_CREATE(int);
@@ -241,12 +244,12 @@ int main() {
 
     /*FILE *fp = fopen("result.txt", "w");*/
     /*if (fp == NULL) {*/
-        /*perror("Failed to open file");*/
-        /*return 1;*/
+    /*perror("Failed to open file");*/
+    /*return 1;*/
     /*}*/
 
     /*for (int i = 0; i < result2->len; i++) {*/
-        /*fprintf(fp, "%d\n", result2->buffer[i]);*/
+    /*fprintf(fp, "%d\n", result2->buffer[i]);*/
     /*}*/
 
     /*fclose(fp);*/
@@ -268,24 +271,24 @@ int main() {
 
     /*FILE *fp2 = fopen("a.txt", "w");*/
     /*if (fp2 == NULL) {*/
-        /*perror("Failed to open file");*/
-        /*return 1;*/
+    /*perror("Failed to open file");*/
+    /*return 1;*/
     /*}*/
 
     /*for (int i = 0; i < a->len; i++) {*/
-        /*fprintf(fp2, "%d\n", a->buffer[i]);*/
+    /*fprintf(fp2, "%d\n", a->buffer[i]);*/
     /*}*/
 
     /*fclose(fp2);*/
 
     /*FILE *fp3 = fopen("b.txt", "w");*/
     /*if (fp3 == NULL) {*/
-        /*perror("Failed to open file");*/
-        /*return 1;*/
+    /*perror("Failed to open file");*/
+    /*return 1;*/
     /*}*/
 
     /*for (int i = 0; i < b->len; i++) {*/
-        /*fprintf(fp3, "%d\n", b->buffer[i]);*/
+    /*fprintf(fp3, "%d\n", b->buffer[i]);*/
     /*}*/
 
     /*fclose(fp3);*/
