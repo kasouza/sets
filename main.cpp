@@ -45,14 +45,28 @@ std::vector<int> intersection2(const std::vector<int> &a,
 int main() {
     srand(time(NULL));
 
-    int maxIterations = 100000000;
+    int maxIterations = 100000;
 
     std::vector<int> a;
     std::vector<int> b;
 
     for (int i = 0; i < maxIterations; ++i) {
-        a.push_back(i);
-        b.push_back(i);
+        int r = rand();
+
+        // Maybe add only to a, maybe only to b, maybe to both
+        if (rand() % 2) {
+            a.push_back(r);
+        }
+
+        if (rand() % 2) {
+            b.push_back(r);
+        }
+
+        // Add to both
+        if (rand() % 2) {
+            a.push_back(r);
+            b.push_back(r);
+        }
     }
 
     // Time the execution of intersection2
