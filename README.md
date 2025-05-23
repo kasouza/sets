@@ -8,7 +8,7 @@ Simply loop over the two lists of items and save the ones that are in both in a 
 ### Method 2 (fast)
 Add all the elements of the smaller list to a hashset (or hashmap), then iterate through the larger list, checking if each element is in the hashset, if it is, add to the resulting intersecition
 
-Here the result might be a list (or array or something like that) or a set. Adding to a list is considerably faster, so if either the input likes are guaranteed to have unique elements or you just don't care if the result has duplicates, then you should use a list/array, otherwise use a set.
+Here the result might be a list (or array or something like that) or a set. Adding to a list is considerably faster, so if either the input list are guaranteed to have only unique elements or you just don't care if the result has duplicates, then you should use a list/array, otherwise use a set.
 
 ### Method 3 (faster?)
 Consider two lists `a` and `b`
